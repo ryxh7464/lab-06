@@ -6,6 +6,7 @@ TEAM NAME
 
 ``` r
 library(tidyverse) 
+library(lubridate)
 ```
 
 ### Exercise 1
@@ -62,10 +63,38 @@ mask_data <- tribble(
 )
 ```
 
+``` r
+new_mask <- mask_data %>% 
+  mutate(date = dmy(date)) %>% 
+  arrange(date) 
+
+unique(new_mask$date)
+```
+
+    ##  [1] "2020-07-12" "2020-07-13" "2020-07-14" "2020-07-15" "2020-07-16"
+    ##  [6] "2020-07-17" "2020-07-18" "2020-07-19" "2020-07-20" "2020-07-21"
+    ## [11] "2020-07-22" "2020-07-23" "2020-07-24" "2020-07-25" "2020-07-26"
+    ## [16] "2020-07-27" "2020-07-28" "2020-07-29" "2020-07-30" "2020-07-31"
+    ## [21] "2020-08-01" "2020-08-02" "2020-08-03"
+
+``` r
+head(new_mask$date)
+```
+
+    ## [1] "2020-07-12" "2020-07-12" "2020-07-13" "2020-07-13" "2020-07-14"
+    ## [6] "2020-07-14"
+
 ### Exercise 2
 
 ``` r
-ggplot(mask_data, mapping = aes(date, count, colour = mask, group = mask)) +
+#mask_data %>% 
+#  mutate(date = as.Date(date)) %>%
+  #separate(date, c('date', 'month', 'year'), remove = TRUE,
+  #convert = FALSE) %>%
+  #arrange(month, date) %>%
+
+new_mask %>% 
+ggplot(mapping = aes(x= date, y=count, colour = mask, group = mask)) +
   geom_line() +
   theme(axis.text.x = element_text(angle = 90)) +
   labs(x = "Date",
@@ -80,7 +109,14 @@ ggplot(mask_data, mapping = aes(date, count, colour = mask, group = mask)) +
 
 ### Exercise 3
 
-*Add your narrative here.*
+The same y-axis makes the difference between with mask and without mask
+be shown more obviously. As shown in above visualization, we can say
+mask-mandate counties experienced extremely large size of population
+getting covid-19 at first but finally decreased to a small population,
+while for non-mask-mandate counties, size of covid-19 population was
+continuously at about 2000k. So, even if there were more people getting
+covid-19 with mask at first, after half month, there were much less
+people getting covid-19 with mask than that without mask.
 
 ### Exercise 4
 
